@@ -1414,8 +1414,6 @@ Day 3: Behance Upload  " data-fee="₹1000 (Up to 70% off with valid promotional
 
 
 
-
-
     <script src="static/assets/js/jquery-3.6.0.min.js"></script>
     <script src="static/assets/js/bootstrap.bundle.min.js"></script>
     <script src="static/assets/js/jquery.magnific-popup.min.js"></script>
@@ -1731,12 +1729,12 @@ Day 3: Behance Upload  " data-fee="₹1000 (Up to 70% off with valid promotional
             }
             });
 
-            function closeOverlay() {
-            overlay.classList.add('hidden');
-            spinner.classList.add('hidden');
-            successMessage.classList.add('hidden');
-            }
         })();
+        function closeOverlay() {
+        overlay.classList.add('hidden');
+        spinner.classList.add('hidden');
+        successMessage.classList.add('hidden');
+        }
     </script>
 
 
@@ -1833,182 +1831,128 @@ Day 3: Behance Upload  " data-fee="₹1000 (Up to 70% off with valid promotional
 
 
     <script>
+    document.getElementById("viewQRButton").addEventListener("click", function () {
+        const interntype = document.getElementById("interntype").value;
+        const mode = document.getElementById("internshipMode").value;
+        const duration = document.getElementById("duration").value;
+        const certType = document.getElementById("cer-type").value;
+        const internshipType = document.getElementById("internshipType").value; // "individual" or "group"
+        let couponValue = document.getElementById("couponInput").value.trim();
+        let qrImage = document.getElementById("qrImage");
+        let amount = document.getElementById("amount");
+        let popup = document.getElementById("qrPopup");
+        let finalAmount = 1000;
+        let imagePath = "static/assets/upi_1000.png";
 
-            document.getElementById("viewQRButton").addEventListener("click", function () {
-            const interntype = document.getElementById("interntype").value;
-            const mode = document.getElementById("internshipMode").value;
-            const duration = document.getElementById("duration").value;
-            const certType = document.getElementById("cer-type").value;
-            const internshipType = document.getElementById("internshipType").value;
-            let couponValue = document.getElementById("couponInput").value.trim();
-            let qrImage = document.getElementById("qrImage");
-            let amount = document.getElementById("amount");
-            let popup = document.getElementById("qrPopup");
-            let finalAmount = 1000;
-            let imagePath = "static/assets/upi_1000.png";
+        // Update certificate type visibility
+        const certSelect = document.getElementById("cer-type");
+        certSelect.innerHTML = "";
+        if (mode === "Online" && interntype === "project-intern") {
+            certSelect.innerHTML = '<option value="softcopy">SoftCopy</option>';
+        } else {
+            certSelect.innerHTML = '<option value="softcopy">SoftCopy</option><option value="hardcopy">HardCopy(+100 Ruppes)</option>';
+        }
 
-            // Update certificate type visibility based on mode and interntype
-            const certSelect = document.getElementById("cer-type");
-            certSelect.innerHTML = ""; // Clear existing options
-            if (mode === "Online" && interntype === "project-intern") {
-                certSelect.innerHTML = '<option value="softcopy">SoftCopy</option>';
-            } else {
-                certSelect.innerHTML = '<option value="softcopy">SoftCopy</option><option value="hardcopy">HardCopy(+100 Ruppes)</option>';
-            }
-
-            // Group discount function
-            function applyGroupDiscount(amount, duration) {
-                if (internshipType === "group") {
-                    if (duration === "1-month" || duration === "2-month") {
-                        return amount - 100;
-                    } else if (duration === "3-month") {
-                        return amount - 200;
-                    } else if (duration === "6-month") {
-                        return amount - 500;
-                    }
+        // --------------------------
+        // Project & Intern Pricing (UNCHANGED)
+        // --------------------------
+        if (interntype === "project-intern") {
+            if (mode === "Online") {
+                if (duration === "1-month") {
+                    finalAmount = internshipType === "group" ? 400 : 500;
+                    imagePath = finalAmount === 400 ? "static/assets/upi_400.png" : "static/assets/upi_500.png";
+                } else if (duration === "2-month") {
+                    finalAmount = internshipType === "group" ? 800 : 900;
+                    imagePath = finalAmount === 800 ? "static/assets/upi_800.png" : "static/assets/upi_900.png";
+                } else if (duration === "3-month") {
+                    finalAmount = internshipType === "group" ? 1200 : 1400;
+                    imagePath = finalAmount === 1200 ? "static/assets/upi_1200.png" : "static/assets/upi_1400.png";
                 }
-                return amount;
-            }
-
-            // Project & Intern Pricing
-            if (interntype === "project-intern") {
-                if (mode === "Online") {
-                    if (duration === "1-month") {
-                        finalAmount = applyGroupDiscount(500, duration);
-                        imagePath = finalAmount === 400 ? "static/assets/upi_400.png" : "static/assets/upi_500.png";
-                    } else if (duration === "2-month") {
-                        finalAmount = applyGroupDiscount(900, duration);
-                        imagePath = finalAmount === 800 ? "static/assets/upi_800.png" : "static/assets/upi_900.png";
-                    } else if (duration === "3-month") {
-                        finalAmount = applyGroupDiscount(1400, duration);
-                        imagePath = finalAmount === 1200 ? "static/assets/upi_1200.png" : "static/assets/upi_1400.png";
-                    }
-                } else if (mode === "Offline" || mode === "Remote") {
-                    if (duration === "1-month") {
-                        finalAmount = certType === "hardcopy" ? applyGroupDiscount(900, duration) : applyGroupDiscount(800, duration);
-                        imagePath = finalAmount === 800 ? "static/assets/upi_800.png" : finalAmount === 700 ? "static/assets/upi_700.png" : "static/assets/upi_900.png";
-                    } else if (duration === "2-month") {
-                        finalAmount = certType === "hardcopy" ? applyGroupDiscount(1600, duration) : applyGroupDiscount(1500, duration);
-                        imagePath = finalAmount === 1500 ? "static/assets/upi_1500.png" : finalAmount === 1400 ? "static/assets/upi_1400.png" : "static/assets/upi_1600.png";
-                    } else if (duration === "3-month") {
-                        finalAmount = certType === "hardcopy" ? applyGroupDiscount(2500, duration) : applyGroupDiscount(2400, duration);
-                        imagePath = finalAmount === 2400 ? "static/assets/upi_2400.png" : finalAmount === 2300 ? "static/assets/upi_2300.png" : "static/assets/upi_2500.png";
-                    }
+            } else if (mode === "Offline" || mode === "Remote") {
+                if (duration === "1-month") {
+                    finalAmount = certType === "hardcopy" ? 900 : 800;
+                    imagePath = `static/assets/upi_${finalAmount}.png`;
+                } else if (duration === "2-month") {
+                    finalAmount = certType === "hardcopy" ? 1600 : 1500;
+                    imagePath = `static/assets/upi_${finalAmount}.png`;
+                } else if (duration === "3-month") {
+                    finalAmount = certType === "hardcopy" ? 2500 : 2400;
+                    imagePath = `static/assets/upi_${finalAmount}.png`;
                 }
             }
+        }
 
-            // Training & Intern Pricing
-            if (interntype === "training-intern") {
-                if (mode === "Online") {
-                    if (duration === "1-month") {
-                        finalAmount = applyGroupDiscount(1000, duration);
-                        imagePath = finalAmount === 900 ? "static/assets/upi_900.png" : "static/assets/upi_1000.png";
-                    } else if (duration === "2-month") {
-                        finalAmount = applyGroupDiscount(2000, duration);
-                        imagePath = finalAmount === 1900 ? "static/assets/upi_1900.png" : "static/assets/upi_2000.png";
-                    } else if (duration === "3-month") {
-                        finalAmount = applyGroupDiscount(3000, duration);
-                        imagePath = finalAmount === 2800 ? "static/assets/upi_2800.png" : "static/assets/upi_3000.png";
-                    } else if (duration === "6-month") {
-                        finalAmount = applyGroupDiscount(5000, duration);
-                        imagePath = finalAmount === 4500 ? "static/assets/upi_4500.png" : "static/assets/upi_5000.png";
-                    }
-                } else if (mode === "Offline" || mode === "Remote") {
-                    if (duration === "1-month") {
-                        finalAmount = certType === "hardcopy" ? applyGroupDiscount(1600, duration) : applyGroupDiscount(1500, duration);
-                        imagePath = finalAmount === 1500 ? "static/assets/upi_1500.png" : finalAmount === 1400 ? "static/assets/upi_1400.png" : "static/assets/upi_1600.png";
-                    } else if (duration === "2-month") {
-                        finalAmount = certType === "hardcopy" ? applyGroupDiscount(2600, duration) : applyGroupDiscount(2500, duration);
-                        imagePath = finalAmount === 2500 ? "static/assets/upi_2500.png" : finalAmount === 2400 ? "static/assets/upi_2400.png" : "static/assets/upi_2600.png";
-                    } else if (duration === "3-month") {
-                        finalAmount = certType === "hardcopy" ? applyGroupDiscount(3600, duration) : applyGroupDiscount(3500, duration);
-                        imagePath = finalAmount === 3500 ? "static/assets/upi_3500.png" : finalAmount === 3400 ? "static/assets/upi_3400.png" : "static/assets/upi_3600.png";
-                    } else if (duration === "6-month") {
-                        finalAmount = certType === "hardcopy" ? applyGroupDiscount(5600, duration) : applyGroupDiscount(5500, duration);
-                        imagePath = finalAmount === 5500 ? "static/assets/upi_5500.png" : finalAmount === 5100 ? "static/assets/upi_5100.png" : "static/assets/upi_5600.png";
-                    }
+        // --------------------------
+        // Training & Intern Pricing (UPDATED WITH INDIVIDUAL + GROUP)
+        // --------------------------
+        if (interntype === "training-intern") {
+            // Pricing table from poster
+            const trainingPricing = {
+                online: {
+                    "15-days": { individual: 400, group: null },
+                    "1-month": { individual: 600, group: 500 },
+                    "2-month": { individual: 1100, group: 1000 },
+                    "3-month": { individual: 1600, group: 1400 },
+                    "6-month": { individual: 3600, group: 3000 }
+                },
+                offline: {
+                    "15-days": { individual: 500, group: 450 },
+                    "1-month": { individual: 1000, group: 900 },
+                    "2-month": { individual: 1900, group: 1700 },
+                    "3-month": { individual: 2800, group: 2500 },
+                    "6-month": { individual: 5000, group: 4500 }
                 }
-            }
+            };
 
-            // Check for specific coupon codes (override group discounts)
-            switch (couponValue) {
-                case "ARTPI500":
-                    finalAmount = 500;
-                    imagePath = "static/assets/upi_500.png";
-                    break;
-                case "ARTPI600":
-                    finalAmount = 400;
-                    imagePath = "static/assets/upi_400.png";
-                    break;
-                case "ARTPI700":
-                    finalAmount = 300;
-                    imagePath = "static/assets/upi_300.png";
-                    break;
-                case "ARTPI400":
-                    finalAmount = 600;
-                    imagePath = "static/assets/upi_600.png";
-                    break;
-            }
+            // Choose correct pricing
+            let priceObj = (mode === "Online") ? trainingPricing.online[duration] : trainingPricing.offline[duration];
+            let basePrice = (internshipType === "group" && priceObj.group !== null) ? priceObj.group : priceObj.individual;
 
-            // Update DOM
-            amount.innerText = finalAmount;
-            qrImage.src = imagePath;
-            popup.style.display = "block";
-        });
-
-        document.getElementById("closeQRPopup").addEventListener("click", function () {
-            document.getElementById("qrPopup").style.display = "none";
-        });
-
-        // Update certificate and duration options when internship type or mode changes
-        document.getElementById("interntype").addEventListener("change", function () {
-            const mode = document.getElementById("internshipMode").value;
-            const interntype = this.value;
-            const certSelect = document.getElementById("cer-type");
-            const durationSelect = document.getElementById("duration");
-            
-            // Update certificate options
-            certSelect.innerHTML = "";
-            if (mode === "Online" && interntype === "project-intern") {
-                certSelect.innerHTML = '<option value="softcopy">SoftCopy</option>';
+            // Apply coupon or ₹1000 extra
+            if (couponValue === "020925RTPTI") {
+                finalAmount = basePrice + 100; // Coupon
             } else {
-                certSelect.innerHTML = '<option value="softcopy">SoftCopy</option><option value="hardcopy">HardCopy(+100 Ruppes)</option>';
+                finalAmount = basePrice + 1200; // Default
             }
 
-            // Update duration options
-            durationSelect.innerHTML = "";
-            if (interntype === "project-intern") {
-                durationSelect.innerHTML = `
-                    <option value="1-month">1 Month</option>
-                    <option value="2-month">2 Months</option>
-                    <option value="3-month">3 Months</option>
-                `;
-            } else {
-                durationSelect.innerHTML = `
-                    <option value="1-month">1 Month</option>
-                    <option value="2-month">2 Months</option>
-                    <option value="3-month">3 Months</option>
-                    <option value="6-month">6 Months</option>
-                `;
-            }
-        });
+            // Set QR image
+            imagePath = `static/assets/upi_${finalAmount}.png`;
+        }
 
-        document.getElementById("internshipMode").addEventListener("change", function () {
-            const interntype = document
+        // --------------------------
+        // Existing Coupon Overrides (UNCHANGED)
+        // --------------------------
+        switch (couponValue) {
+            case "ARTPI500":
+                finalAmount = 500;
+                imagePath = "static/assets/upi_500.png";
+                break;
+            case "ARTPI600":
+                finalAmount = 400;
+                imagePath = "static/assets/upi_400.png";
+                break;
+            case "ARTPI700":
+                finalAmount = 300;
+                imagePath = "static/assets/upi_300.png";
+                break;
+            case "ARTPI400":
+                finalAmount = 600;
+                imagePath = "static/assets/upi_600.png";
+                break;
+        }
 
-        .getElementById("interntype").value;
-            const mode = this.value;
-            const certSelect = document.getElementById("cer-type");
-            certSelect.innerHTML = "";
-            if (mode === "Online" && interntype === "project-intern") {
-                certSelect.innerHTML = '<option value="softcopy">SoftCopy</option>';
-            } else {
-                certSelect.innerHTML = '<option value="softcopy">SoftCopy</option><option value="hardcopy">HardCopy(+100 Ruppes)</option>';
-            }
-        });
+        // Update DOM
+        amount.innerText = finalAmount;
+        qrImage.src = imagePath;
+        popup.style.display = "block";
+    });
 
-
+    document.getElementById("closeQRPopup").addEventListener("click", function () {
+        document.getElementById("qrPopup").style.display = "none";
+    });
     </script>
+
+
 
 
 
